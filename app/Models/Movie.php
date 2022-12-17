@@ -25,7 +25,8 @@ class Movie extends Model implements Searchable
         'video_format',
         'is_public',
         'backdrop_path',
-        'slug'
+        'slug',
+        'embed_html'
     ];
 
     public function getSearchResult(): SearchResult
@@ -57,5 +58,4 @@ class Movie extends Model implements Searchable
     {
         return $this->belongsToMany(Cast::class, 'cast_movie');
     }
-
 }

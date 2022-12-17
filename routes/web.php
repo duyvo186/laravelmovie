@@ -14,10 +14,15 @@ use App\Http\Livewire\SeasonIndex;
 use App\Http\Livewire\SerieIndex;
 use App\Http\Livewire\TagIndex;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\IndexController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 
-Route::get('/', [WelcomeController::class, 'index']);
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome.index');
 Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
 Route::get('/movies/{movie:slug}', [MovieController::class, 'show'])->name('movies.show');
+Route::get('/movies-show/{movie:slug}', [MovieController::class, 'watchMovie'])->name('movies.showMovie');
 Route::get('/series', [SerieController::class, 'index'])->name('series.index');
 Route::get('/series/{serie:slug}', [SerieController::class, 'show'])->name('series.show');
 Route::get('/series/{serie:slug}/seasons/{season:slug}', [SerieController::class, 'seasonShow'])->name('season.show');
@@ -27,7 +32,7 @@ Route::get('/casts/{cast:slug}', [CastController::class, 'show'])->name('casts.s
 Route::get('/genre/{genre:slug}', [GenreController::class, 'show'])->name('genres.show');
 
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth:sanctum', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
     Route::get('movies', MovieIndex::class)->name('movies.index');
     Route::get('series', SerieIndex::class)->name('series.index');
@@ -41,3 +46,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::name('admin.')->prefix('admin')->group(function () {
+    Route::resource('/roles', RoleController::class);
+    Route::post('/roles/{role}/permissions', [RoleController::class, 'givePermission'])->name('roles.permissions');
+    Route::delete('/roles/{role}/permissions/{permission}', [RoleController::class, 'revokePermission'])->name('roles.permissions.revoke');
+    Route::resource('/permissions', PermissionController::class);
+    Route::post('/permissions/{permission}/roles', [PermissionController::class, 'assignRole'])->name('permissions.roles');
+    Route::delete('/permissions/{permission}/roles/{role}', [PermissionController::class, 'removeRole'])->name('permissions.roles.remove');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::post('/users/{user}/roles', [UserController::class, 'assignRole'])->name('users.roles');
+    Route::delete('/users/{user}/roles/{role}', [UserController::class, 'removeRole'])->name('users.roles.remove');
+    Route::post('/users/{user}/permissions', [UserController::class, 'givePermission'])->name('users.permissions');
+    Route::delete('/users/{user}/permissions/{permission}', [UserController::class, 'revokePermission'])->name('users.permissions.revoke');
+});

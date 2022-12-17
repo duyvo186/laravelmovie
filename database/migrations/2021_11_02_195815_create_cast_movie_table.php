@@ -15,8 +15,9 @@ class CreateCastMovieTable extends Migration
     {
         Schema::create('cast_movie', function (Blueprint $table) {
             $table->id();
-             $table->foreignId('cast_id')->constrained();
+            $table->foreignId('cast_id')->constrained();
             $table->foreignId('movie_id')->constrained();
+            $table->text('embed_html');
         });
     }
 
