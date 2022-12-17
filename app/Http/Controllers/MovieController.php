@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
+
     public function index()
     {
         $movies = Movie::orderBy('created_at', 'desc')->paginate(18);
@@ -16,5 +17,11 @@ class MovieController extends Controller
     {
         $latest = Movie::orderBy('created_at', 'desc')->take(9)->get();
         return view('movies.show', compact('movie', 'latest'));
+    }
+
+    public function watchMovie(Movie $movie)
+    {
+        $latest = Movie::orderBy('created_at', 'desc')->take(9)->get();
+        return view('movies.showMovie', compact('movie', 'latest'));
     }
 }

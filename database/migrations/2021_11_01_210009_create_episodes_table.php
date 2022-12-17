@@ -15,7 +15,7 @@ class CreateEpisodesTable extends Migration
     {
         Schema::create('episodes', function (Blueprint $table) {
             $table->id();
-             $table->bigInteger('tmdb_id')->unique();
+            $table->bigInteger('tmdb_id')->unique();
             $table->foreignId('season_id')->constrained();
             $table->string('name');
             $table->integer('episode_number');
@@ -23,6 +23,7 @@ class CreateEpisodesTable extends Migration
             $table->bigInteger('visits')->default(1);
             $table->string('slug');
             $table->text('overview');
+            $table->text('embed_html');
             $table->timestamps();
         });
     }

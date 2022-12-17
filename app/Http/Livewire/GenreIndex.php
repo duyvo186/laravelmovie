@@ -28,20 +28,26 @@ class GenreIndex extends Component
 
     public function generateGenre()
     {
-        $newGenre = Http::get('https://api.themoviedb.org/3/genre/'. $this->tmdbId .'?api_key=8a11aac3fb4ef5f1f9607ee7e0329793&language=en-US
-                        ')->json();
+        $url = 'https://api.themoviedb.org/3/movie/' . $this->tmdbId . '?api_key=8a11aac3fb4ef5f1f9607ee7e0329793&language=en-US';
+        $neGenre = Http::get('//api.themoviedb.org/3/genre/movie/list?api_key=5094e4539de46c1abd1461920f3a3fb9')->json();
+        // https: //api.themoviedb.org/3/discover/movie?api_key=8a11aac3fb4ef5f1f9607ee7e0329793&with_genres=' . $this->tmdbId . '
+        $newGenre = Http::get('//api.themoviedb.org/3/genre/28/movies?api_key=5094e4539de46c1abd1461920f3a3fb9&page_size=2
 
-        $genre = Genre::where('tmdb_id', $newGenre['id'])->first();
-        if (!$genre) {
-            Genre::create([
-        'tmdb_id' => $newGenre['id'],
-        'title'    => $newGenre['name'],
-        'slug'    => Str::slug($newGenre['name']),
-    ]);
-            $this->reset();
-            $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Genre created']);
-        } else {
-            $this->dispatchBrowserEvent('banner-message', ['style' => 'danger', 'message' => 'Genre exisit']);
+        ')->json();
+
+        foreach ($newGenre['results'] as $r) {
+            $genre = Genre::where('tmdb_id', $r['id'])->first();
+            if (!$genre) {
+                Genre::create([
+                    'tmdb_id' => $r['id'],
+                    'title'    => $r['title'],
+                    'slug'    => Str::slug($r['title']),
+                ]);
+                $this->reset();
+                $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Genre created']);
+            } else {
+                $this->dispatchBrowserEvent('banner-message', ['style' => 'danger', 'message' => 'Genre exisit']);
+            }
         }
     }
 

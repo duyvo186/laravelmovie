@@ -27,6 +27,20 @@
 
     <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
         <div class="w-full shadow p-5 bg-white">
+            <div style="float:right;" >
+                <button type="button" wire:click="showToCreateMovie"
+                        class="inline-flex items-center justify-center py-2 px-4 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-green-600 hover:bg-green-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-green-700 transition duration-150 ease-in-out disabled:opacity-50">
+                    <svg wire:loading wire:target="showToCreateMovie" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    <span>Create Movie</span>
+                </button>
+            </div>
             <div>
                 <div class="flex justify-between">
                     <div class="flex-1">
@@ -44,7 +58,7 @@
                                 class="px-8 py-3 w-full md:w-2/6 rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm" />
                         </div>
                     </div>
-                    <div class="flex">
+                    <div class="">
                         <select wire:model="perPage"
                             class="px-4 py-3 w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0 text-sm">
                             <option value="5">5 Per Page</option>
@@ -173,6 +187,152 @@
             </div>
         </div>
     </div>
+
+    <x-jet-dialog-modal wire:model="showCreateMovie">
+        <x-slot name="title">Create Movie</x-slot>
+        <x-slot name="content">
+            <div class="mt-10 sm:mt-0">
+                <div class="mt-5 md:mt-0 md:col-span-2" x-data="{tab: 0}">
+                    <div class="flex border border-black overflow-hidden">
+                        <button class="px-4 py-2 w-full" x-on:click.prevent="tab = 0">Form</button>
+                        <button class="px-4 py-2 w-full" x-on:click.prevent="tab = 1">Tags</button>
+                        <button class="px-4 py-2 w-full" x-on:click.prevent="tab = 2">Casts</button>
+                    </div>
+                    <div>
+                        <div class="p-4 space-x-2" x-show="tab === 0">
+                            <form>
+                                <div class="shadow overflow-hidden sm:rounded-md">
+                                    <div class="px-4 py-5 bg-white sm:p-6">
+                                        <div class="flex flex-col">
+                                            <label for="first-name"
+                                                class="block text-sm font-medium text-gray-700 mr-4">Title</label>
+                                            <input wire:model="title" value="title" type="text"
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                            @error('title')
+                                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label for="first-name"
+                                                class="block text-sm font-medium text-gray-700 mr-4">Runtime</label>
+                                            <input wire:model="runtime" value="runtime" type="text"
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                            @error('runtime')
+                                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label for="first-name"
+                                                class="block text-sm font-medium text-gray-700 mr-4">Language</label>
+                                            <input wire:model="lang" value="language" type="text"
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                            @error('lang')
+                                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label for="first-name"
+                                                class="block text-sm font-medium text-gray-700 mr-4">Format</label>
+                                            <input wire:model="videoFormat" type="text"
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                            @error('videoFormat')
+                                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label for="first-name"
+                                                class="block text-sm font-medium text-gray-700 mr-4">Release Date</label>
+                                            <input wire:model="videoFormat" type="text"
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label for="first-name"
+                                                class="block text-sm font-medium text-gray-700 mr-4">Rating</label>
+                                            <input wire:model="rating" type="text"
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                            @error('rating')
+                                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label for="first-name"
+                                                class="block text-sm font-medium text-gray-700 mr-4">Poster</label>
+                                            <input wire:model="posterPath" type="text"
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                            @error('posterPath')
+                                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="flex flex-col">
+                                            <label for="first-name"
+                                                class="block text-sm font-medium text-gray-700 mr-4">Backdrop</label>
+                                            <input wire:model="backdropPath" type="text"
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                            @error('backdropPath')
+                                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="flex flex-col">
+                                            <label for="embedHtml"
+                                                class="block text-sm font-medium text-gray-700 mr-4">Embed Html</label>
+                                            <textarea wire:model="embedHtml"
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" ></textarea>
+                                            {{-- @error('overview')
+                                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                                            @enderror --}}
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <label for="overview"
+                                                class="block text-sm font-medium text-gray-700 mr-4">Overview</label>
+                                            <textarea wire:model="overview"
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">s</textarea>
+                                            @error('overview')
+                                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="flex flex-col">
+                                            <div class="flex items-center px-2 py-6">
+                                                <input wire:model="isPublic" type="checkbox"
+                                                    class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                                <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                                                    Published
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="p-4 space-x-2" x-show="tab === 1">
+                            @if ($movie)
+                                <livewire:movie-tag :movie="$movie" />
+                            @endif
+                        </div>
+                        <div class="p-4 space-x-2" x-show="tab === 2">
+                            @if ($movie)
+                                <livewire:movie-cast :movie="$movie" />
+                            @endif
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </x-slot>
+        <x-slot name="footer">
+            <x-m-button wire:click="closeMovieModal" class="bg-gray-600 hover:bg-gray-800 text-white">Cancel
+            </x-m-button>
+            <x-m-button wire:click="createMovie">Create Movie</x-m-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+
+
+
+
     <x-jet-dialog-modal wire:model="showMovieModal">
         <x-slot name="title">Update Movie</x-slot>
         <x-slot name="content">

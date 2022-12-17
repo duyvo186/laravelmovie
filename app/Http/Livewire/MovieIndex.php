@@ -6,9 +6,13 @@ use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\TrailerUrl;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use DB;
 
 class MovieIndex extends Component
 {
@@ -36,6 +40,7 @@ class MovieIndex extends Component
     public $embedHtml;
 
     public $showMovieModal = false;
+    public $showCreateMovie = false;
     public $showTrailer = false;
     public $showMovieDetailModal = false;
 
@@ -55,8 +60,17 @@ class MovieIndex extends Component
         'rating' => 'required',
         'backdropPath' => 'required',
         'overview' => 'required',
-        'isPublic' => 'required'
+        'isPublic' => 'required',
+        'embedHtml' => 'required'
     ];
+
+    // function __construct()
+    // {
+    //     $this->middleware('permission:movie-list|movie-create|movie-edit|movie-delete', ['only' => ['index', 'store']]);
+    //     $this->middleware('permission:movie-create', ['only' => ['create', 'store']]);
+    //     $this->middleware('permission:movie-edit', ['only' => ['edit', 'update']]);
+    //     $this->middleware('permission:movie-delete', ['only' => ['destroy']]);
+    // }
 
     // generate movie
 
@@ -86,7 +100,8 @@ class MovieIndex extends Component
                 'is_public' => false,
                 'overview' => $newMovie['overview'],
                 'poster_path' => $newMovie['poster_path'],
-                'backdrop_path' => $newMovie['backdrop_path']
+                'backdrop_path' => $newMovie['backdrop_path'],
+                'embed_html' => null
             ]);
             $tmdb_genres = $newMovie['genres'];
             $tmdb_genres_ids = collect($tmdb_genres)->pluck('id');
@@ -98,6 +113,76 @@ class MovieIndex extends Component
             $this->dispatchBrowserEvent('banner-message', ['style' => 'danger', 'message' => 'Api not exists']);
             $this->reset('tmdbId');
         }
+    }
+
+    public function showToCreateMovie(Request $request)
+    {
+
+        $this->showCreateMovie = true;
+
+        // dd(1111);
+        // $this->validate();
+        // if ($request->all()) {
+        //     $created_movie = Movie::create([
+        //         'tmdb_id' => $newMovie['id'],
+        //         'title' => $newMovie['title'],
+        //         'slug'  => Str::slug($newMovie['title']),
+        //         'runtime' => $newMovie['runtime'],
+        //         'rating' => $newMovie['vote_average'],
+        //         'release_date' => $newMovie['release_date'],
+        //         'lang' => $newMovie['original_language'],
+        //         'video_format' => 'HD',
+        //         'is_public' => false,
+        //         'overview' => $newMovie['overview'],
+        //         'poster_path' => $newMovie['poster_path'],
+        //         'backdrop_path' => $newMovie['backdrop_path']
+        //     ]);
+        // }
+    }
+
+    public function createMovie()
+    {
+
+        $this->validate();
+        // dd(1111);
+        return
+            Movie::create([
+                'title' => $this->title,
+                'runtime' => $this->runtime,
+                'lang' => $this->lang,
+                'video_format' => $this->videoFormat,
+                'rating' => $this->rating,
+                'poster_path' => $this->posterPath,
+                'backdrop_path' => $this->backdropPath,
+                'over_view' => $this->overview,
+                'is_public' => $this->isPublic,
+                'embed_html' => $this->embedHtml
+            ]);
+        $this->reset('tmdbId');
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Movie created']);
+        // $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Movie updated']);
+        // $this->reset();
+        // dd($request->embed_html);
+        // $this->showCreateMovie = true;
+
+        // dd(1111);
+        // $this->validate();
+        // if ($request->all()) {
+        //     $created_movie = Movie::create([
+        //         'tmdb_id' => $newMovie['id'],
+        //         'title' => $newMovie['title'],
+        //         'slug'  => Str::slug($newMovie['title']),
+        //         'runtime' => $newMovie['runtime'],
+        //         'rating' => $newMovie['vote_average'],
+        //         'release_date' => $newMovie['release_date'],
+        //         'lang' => $newMovie['original_language'],
+        //         'video_format' => 'HD',
+        //         'is_public' => false,
+        //         'overview' => $newMovie['overview'],
+        //         'poster_path' => $newMovie['poster_path'],
+        //         'backdrop_path' => $newMovie['backdrop_path']
+        //     ]);
+        // }
     }
 
     public function sortByColumn($column)

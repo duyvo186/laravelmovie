@@ -24,7 +24,7 @@
     <x-jet-banner />
 
     <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200 font-roboto">
-        @role('admin') <x-sidebar></x-sidebar>@endrole
+         <x-sidebar></x-sidebar>
         <div class="flex-1 flex flex-col overflow-hidden">
             <x-header> </x-header>
             <!-- Page Heading -->
@@ -44,7 +44,9 @@
         </div>
     </div>
     @stack('modals')
+
     @livewireScripts
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" integrity="sha512-egJ/Y+22P9NQ9aIyVCh0VCOsfydyn8eNmqBy+y2CnJG+fpRIxXMS6jbWP8tVKp0jp+NO5n8WtMUAnNnGoJKi4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 
 </html>

@@ -23,6 +23,14 @@
                                             </a>
                                         @endforeach
                                     </span>
+                                    <span class="ml-2 space-x-1">
+                                        @foreach ($movie->genres as $genre)
+                                            <a class="font-bold hover:text-blue-500"
+                                                href="{{ route('genres.show', $genre->slug) }}">
+                                                Watch Movie
+                                            </a>
+                                        @endforeach
+                                    </span>
                                     <span class="flex space-x-2">
                                         {{ date('H:i', mktime(0, $movie->runtime)) }}
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
@@ -33,10 +41,20 @@
                                     </span>
                                 </div>
                                 <div class="flex space-x-4">
+                                    <div wire:id="jp6TAhIuHOnvY7mGKPqe"
+                                            wire:initial-data="{&quot;fingerprint&quot;:{&quot;id&quot;:&quot;jp6TAhIuHOnvY7mGKPqe&quot;,&quot;name&quot;:&quot;movie-trailer&quot;,&quot;locale&quot;:&quot;en&quot;,&quot;path&quot;:&quot;movies\/avatar-the-way-of-water&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;v&quot;:&quot;acj&quot;},&quot;effects&quot;:{&quot;listeners&quot;:[]},&quot;serverMemo&quot;:{&quot;children&quot;:[],&quot;errors&quot;:[],&quot;htmlHash&quot;:&quot;56b8d466&quot;,&quot;data&quot;:{&quot;showMovieEmbedModal&quot;:false,&quot;trailer&quot;:[]},&quot;dataMeta&quot;:{&quot;models&quot;:{&quot;trailer&quot;:{&quot;class&quot;:&quot;App\\Models\\TrailerUrl&quot;,&quot;id&quot;:1,&quot;relations&quot;:[],&quot;connection&quot;:&quot;mysql&quot;}}},&quot;checksum&quot;:&quot;9637eb2d3f14a66e17c14d164ceca144245f9337329b8687593bb4783fe19aed&quot;}}">
+                                            <button
+                                                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition"
+                                                wire:click="showMovieTrailerModal">
+                                                <a href="{{ route('movies.showMovie', $movie->slug) }}" > Watch Movie </a>
+                                            </button>
+                                        </div>
+
                                     @foreach ($movie->trailers as $trailer)
                                         <livewire:movie-trailer :trailer="$trailer"></livewire:movie-trailer>
                                     @endforeach
                                 </div>
+
                             </div>
                             <div class="p-8 text-white">
                                 <p>{{ $movie->overview }}</p>
@@ -45,6 +63,7 @@
                     </div>
                 </div>
             </section>
+
             <section class="max-w-6xl mx-auto bg-gray-200 dark:bg-gray-900 p-2 rounded">
                 <div class="flex justify-between">
                     <div class="w-7/12">
